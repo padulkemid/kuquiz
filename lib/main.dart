@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,18 +14,32 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
-  static const questions = [
+  var _totalScore = 0;
+
+  static const _questions = [
     {
       'question': "What's your spirit animal ?",
-      'answers': ['Dragon', 'Tiger', 'Dog']
+      'answers': [
+        {'text': 'Dragon', 'score': 10},
+        {'text': 'Tiger', 'score': 8},
+        {'text': 'Dog', 'score': 5},
+      ],
     },
     {
       'question': "What's your favorite color ?",
-      'answers': ['Black', 'White', 'Blue']
+      'answers': [
+        {'text': 'Blue', 'score': 5},
+        {'text': 'White', 'score': 8},
+        {'text': 'Black', 'score': 10},
+      ],
     },
     {
       'question': "What's your bearing size ?",
-      'answers': ['35mm', '34mm', '39mm']
+      'answers': [
+        {'text': '35mm', 'score': 10},
+        {'text': '39mm', 'score': 5},
+        {'text': '34mm', 'score': 8},
+      ],
     },
   ];
 
@@ -36,26 +50,28 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Kuquiz'),
         ),
-        body: Column(
-          children: [
-            Question(questions[_questionIndex]['question']),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                questions: _questions,
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex)
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
 
-  void _answerQuestion() {
-    if (_questionIndex == questions.length -1 ) {
-      _questionIndex = -1;
-    }
+  void _answerQuestion(int score) {
+    _totalScore += score;
 
     setState(() {
       _questionIndex += 1;
+    });
+  }
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
     });
   }
 }
