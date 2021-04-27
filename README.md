@@ -1,6 +1,7 @@
 # kuquiz
 
-A new Flutter project.
+A new Flutter project purposely to learn about beginner Flutter course from
+DKatalis Academy.
 
 ## Getting Started
 
